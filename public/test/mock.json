@@ -32,11 +32,33 @@
         "order": 1,
         "pricePerSoda": 20.1,
         "pricePerBox": 80.1,
-        "address": "Colombia",
+        "address": "address1",
         "numAddress": 936,
         "idDelivery": 1,
-        "IdRoot": 1,
-        "due": 1
+        "idRoot": 1,
+        "debt": 1000
+      },
+      {
+        "id": 2,
+        "order": 2,
+        "pricePerSoda": 20.1,
+        "pricePerBox": 80.1,
+        "address": "address2",
+        "numAddress": 222,
+        "idDelivery": 1,
+        "idRoot": 1,
+        "debt": 1250
+      },
+      {
+        "id": 3,
+        "order": 3,
+        "pricePerSoda": 20.1,
+        "pricePerBox": 80.1,
+        "address": "address3",
+        "numAddress": 333,
+        "idDelivery": 1,
+        "idRoot": 1,
+        "debt": 500
       }
     ]
   }

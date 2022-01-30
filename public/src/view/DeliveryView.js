@@ -9,22 +9,19 @@ export default class DeliveryView extends React.Component {
         this.state = {
             deliveries: [],
         }
-        this.callService()        
     }
-
-    async callService(){
-       await s.getDeliveries()        
-       this.setState({                
-        deliveries: s.getData()
-       })
+    async componentWillMount() {
+        await s.getDeliveries()   
+        this.setState({                
+            deliveries: s.getData()
+        })
     }
-    
 
     render() {    
         if(this.state.deliveries.length > 0) {
             return (
                 <div>
-                    <h1>Repartidores</h1>
+                    <h3>Repartidores</h3>
                     {
                         this.state.deliveries.map((delivery, i) => {     
                             return (<p id={delivery.id}>{delivery.name}</p>) 

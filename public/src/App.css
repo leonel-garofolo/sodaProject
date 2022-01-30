@@ -64,3 +64,11 @@ li a {
 li a:hover {
   background-color: #111111;
 }
+
+label{
+  font-size: medium;
+}
+
+input button{
+  padding-right: 10px;
+}

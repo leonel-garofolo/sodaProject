@@ -1,5 +1,6 @@
 import React from "react";
 import ReactDOM from "react-dom";
+import ClientCRUDView from "../view/ClientCRUDView";
 import DeliveryView from "../view/DeliveryView";
 import ListClientView from "../view/ListClientView";
 
@@ -10,6 +11,10 @@ export default class Main extends React.Component {
 
     render() {    
         switch (this.props.content) {
+            case 'clients':
+                return (
+                    <ClientCRUDView />
+                );
             case 'list':
                 return (
                     <ListClientView />

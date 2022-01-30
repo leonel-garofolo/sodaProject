@@ -13,10 +13,9 @@ export default class Menu extends React.Component {
         return (
             <div>            
                 <ul>                
-                    <li><a href="#list" onClick={this.onClicked}>Listado</a></li>
-                    <li><a href="#delivery" onClick={this.onClicked}>Repartidores</a></li>
-                    <li><a href="#print" onClick={this.onClicked}>Imprimir</a></li>                    
-                    <li><a href="#exit" onClick={this.onClicked}>Salir</a></li>
+                    <li><a href="#clients" onClick={this.onClicked}>Clientes</a></li>
+                    <li><a href="#list" onClick={this.onClicked}>Listados de Repartos</a></li>
+                    <li><a href="#delivery" onClick={this.onClicked}>Repartidores</a></li>                                        
                 </ul>
             </div>
         );   

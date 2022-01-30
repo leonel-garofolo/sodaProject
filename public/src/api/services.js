@@ -1,6 +1,6 @@
 import Commons from './commons';
 
-var responseData
+var responseData = []
 export default class Services extends Commons{
     constructor() {  
         super()              
@@ -11,14 +11,15 @@ export default class Services extends Commons{
     }
 
     async getDeliveries() {
+        responseData = []
         await super.get("deliveries", null)            
             .then(data => responseData = data)        
     }
 
-    getDeliveryClient() {
-        super.get("delivery", null).then(response =>{
-            console.log(response)
-        })
+    async getDeliveryClient() {
+        responseData = []
+        await super.get("clients", null)
+            .then(data => responseData = data) 
     }
 }
 
