@@ -72,3 +72,13 @@ label{
 input button{
   padding-right: 10px;
 }
+
+/* Custom Css bootstrap */ 
+.container {
+  float: left;
+}
+
+.container-button{
+  padding-left: 5px;
+}
+

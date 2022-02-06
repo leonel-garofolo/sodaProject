@@ -1,112 +1,23 @@
 import React from 'react'
-import styled from 'styled-components'
-import { useTable } from 'react-table'
+import {AgGridColumn, AgGridReact} from 'ag-grid-react';
 
-const Styles = styled.div`
-  padding: 1rem;
-
-  table {
-    border-spacing: 0;
-    border: 1px solid black;
-
-    tr {
-      :last-child {
-        td {
-          border-bottom: 0;
-        }
-      }
-    }
-
-    th,
-    td {
-      margin: 0;
-      padding: 0.5rem;
-      border-bottom: 1px solid black;
-      border-right: 1px solid black;
-
-      :last-child {
-        border-right: 0;
-      }
-    }
-  }
-`
-
-function Table({ columns, data }) {
-  // Use the state and functions returned from useTable to build your UI
-  const {
-    getTableProps,
-    getTableBodyProps,
-    headerGroups,
-    rows,
-    prepareRow,
-  } = useTable({
-    columns,
-    data,
-  })
-
-  // Render the UI for your table
-  return (
-    <table {...getTableProps()}>
-      <thead>
-        {headerGroups.map(headerGroup => (
-          <tr {...headerGroup.getHeaderGroupProps()}>
-            {headerGroup.headers.map(column => (
-              <th {...column.getHeaderProps()}>{column.render('Header')}</th>
-            ))}
-          </tr>
-        ))}
-      </thead>
-      <tbody {...getTableBodyProps()}>
-        {rows.map((row, i) => {
-          prepareRow(row)
-          return (
-            <tr {...row.getRowProps()}>
-              {row.cells.map(cell => {
-                return <td {...cell.getCellProps()}>{cell.render('Cell')}</td>
-              })}
-            </tr>
-          )
-        })}
-      </tbody>
-    </table>
-  )
-}
+import 'ag-grid-community/dist/styles/ag-grid.css';
+import 'ag-grid-community/dist/styles/ag-theme-alpine.css';
 
 function DataTable(jsonData) {
-  const columns = React.useMemo(
-    () => [
-      {
-        Header: 'Orden',
-        accessor: 'order',
-      },
-      {
-        Header: 'Dirección',
-        accessor: 'address',
-      },
-      {
-        Header: 'Numero',
-        accessor: 'numAddress',
-      },      
-      {
-        Header: 'Precio x Soda',
-        accessor: 'pricePerSoda',
-      },  
-      {
-        Header: 'Precio x Cajon',
-        accessor: 'pricePerBox',
-      },
-      {
-        Header: 'Deuda',
-        accessor: 'debt',
-      },       
-    ],
-    []
-  )  
   const data = React.useMemo(() => jsonData.data) 
   return (
-    <Styles>
-      <Table columns={columns} data={data} />
-    </Styles>
+    <div className="ag-theme-alpine" style={{height: 400}}>
+           <AgGridReact               
+               rowData={data}>
+               <AgGridColumn field="order" headerName="Orden" sortable={ true } filter={true} floatingFilter={true} maxWidth="120" />
+               <AgGridColumn field="address" headerName="Dirección" sortable={ true } filter={true} floatingFilter={true} maxWidth="400"/>
+               <AgGridColumn field="numAddress"  headerName="Numero" sortable={ true } filter={true} floatingFilter={true} maxWidth="130" />
+               <AgGridColumn field="pricePerSoda" headerName="Precio x Soda" />
+               <AgGridColumn field="pricePerBox" headerName="Precio x Cajon" />
+               <AgGridColumn field="debt" headerName="Deuda" maxWidth="120" />
+           </AgGridReact>
+       </div>
   )
 }
 

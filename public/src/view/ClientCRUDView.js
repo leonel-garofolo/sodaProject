@@ -1,5 +1,12 @@
 import React from "react";
 import Services from "../api/services";
+import Form from 'react-bootstrap/Form'
+import Container from "react-bootstrap/esm/Container";
+import Row from "react-bootstrap/esm/Row";
+import Col from "react-bootstrap/esm/Col";
+import Button from 'react-bootstrap/Button';
+import ButtonGroup from 'react-bootstrap/ButtonGroup';
+import DeliveryList from "./components/DeliveryList";
 
 const s = new Services()
 
@@ -37,53 +44,38 @@ export default class ClientCRUDView extends React.Component {
     render() { 
         if(this.state.clients.length > 0) {
             return (
-                // add label form to focus tab move into it
-                <form>
-                    <div>
-                        <h3>Clientes</h3> 
-                        <div>
-                            <div><label>Repartos</label></div>
-                            <div>
-                                <select>
-                                    <option id="1">Anselmo</option>
-                                    <option id="2">Ariel</option>
-                                </select>
-                            </div>
-                        </div>
-                        <div>
-                            <div><label>Orden</label></div>
-                            <div><input type="text" id="orden" /></div>   
-                        </div>
-                        <div>
-                            <div><label>Precio por Sifon</label></div>
-                            <div><input type="text" id="pricePerSoda"/></div>   
-                        </div>
-                        <div>
-                            <div><label>Dirección</label></div>
-                            <div><input type="text" id="address"/></div>   
-                        </div>
-                        <div>
-                            <div><label>Numero</label></div>
-                            <div><input type="text" id="numberAddress"/></div>   
-                        </div>
-                        <div>
-                            <div><label>Deuda</label></div>
-                            <div><input type="text" id="debt"/></div>   
-                        </div>
-
-                        <div>
-                            <input type="button" value="Anterior" onClick={this.goBefore}/>
-                            <input type="button" value="Cancelar" onClick={this.cancel}/>
-                            <input type="button" value="Guardar" onClick={this.save}/>                                                    
-                            <input type="button" value="Siguiente" onClick={this.goAfter}/>
-                        </div>                        
-                    </div>
-                </form>
+                <Container className="p-3">    
+                    <Row>
+                        <DeliveryList />
+                    </Row>  
+                    <Row>
+                        <Col><label>Orden</label></Col>                    
+                    </Row>         
+                    <Row>
+                        <Col><input type="text" id="orden" /></Col>
+                    </Row>
+                    <Row><Col><label>Precio por Sifon</label></Col></Row>         
+                    <Row><Col><input type="text" id="pricePerSoda" /></Col></Row>
+                    <Row><Col><label>Dirección</label></Col></Row>         
+                    <Row><Col><input type="text" id="address" /></Col></Row>
+                    <Row><Col><label>Numero</label></Col></Row>         
+                    <Row><Col><input type="text" id="numberAddress" /></Col></Row>
+                    <Row><Col><label>Deuda</label></Col></Row>         
+                    <Row><Col><input type="text" id="debt" /></Col></Row>
+                    <Row>
+                        <ButtonGroup aria-label="Basic example">
+                            <Button variant="outline-info" onClick={this.goBefore}>Anterior</Button>
+                            <Button variant="outline-danger" onClick={this.cancel}>Cancelar</Button>
+                            <Button variant="outline-success" onClick={this.save}>Guardar</Button>
+                            <Button variant="outline-primary" onClick={this.goAfter}>Siguiente</Button>
+                        </ButtonGroup>                
+                    </Row>                
+                </Container>
             );        
         } else {
             return (
                 <div>
-                    <h1>Clientes</h1>                        
+                    <h3>Cargando</h3>                        
                 </div>
             );        
         }

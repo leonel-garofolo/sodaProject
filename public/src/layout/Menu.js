@@ -1,4 +1,7 @@
 import React from "react";
+import Container from "react-bootstrap/esm/Container";
+import Nav from 'react-bootstrap/Nav';
+import Navbar from 'react-bootstrap/Navbar'
 
 export default class Menu extends React.Component {
     constructor(props) {
@@ -10,14 +13,16 @@ export default class Menu extends React.Component {
         this.props.onClick(event.target.getAttribute('href').replace('#', ''))
     }
     render() {
-        return (
-            <div>            
-                <ul>                
-                    <li><a href="#clients" onClick={this.onClicked}>Clientes</a></li>
-                    <li><a href="#list" onClick={this.onClicked}>Listados de Repartos</a></li>
-                    <li><a href="#delivery" onClick={this.onClicked}>Repartidores</a></li>                                        
-                </ul>
-            </div>
+        return (                 
+            <Navbar bg="light"
+                onSelect={(selectedKey) => this.props.onClick(selectedKey)}
+                >
+                <Navbar.Collapse id="basic-navbar-nav">
+                    <Nav.Link eventKey="clients">Clientes</Nav.Link>
+                    <Nav.Link eventKey="list">Listados de Repartos</Nav.Link>
+                    <Nav.Link eventKey="delivery">Repartidores</Nav.Link>
+                </Navbar.Collapse>
+          </Navbar>
         );   
     }
 }
