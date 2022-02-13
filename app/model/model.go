@@ -1,25 +1,25 @@
 package model
 
 type Client struct {
-	Id           int
-	Order        int
-	PricePerSoda float64
-	PricePerBox  float64
-	Address      string
-	NumAddress   int
-	IdDelivery   int
-	IdRoot       int
-	Due          int
+	Id           int     `json:"id"`
+	Order        int     `json:"order"`
+	PricePerSoda float64 `json:"price_per_soda"`
+	PricePerBox  float64 `json:"price_per_box"`
+	Address      string  `json:"address"`
+	NumAddress   int     `json:"num_address"`
+	IdDelivery   int     `json:"id_delivery"`
+	IdRoot       int     `json:"id_root"`
+	Due          int     `json:"due"`
 }
 
 type Delivery struct {
-	Id   int
-	Name string
+	Id   int    `json:"id"`
+	Name string `json:"name"`
 	Code []int
 }
 
 type DeliveryRoot struct {
-	IdDelivery int
-	IdRoot     int
-	Code       int
+	IdDelivery int `json:"id_delivery"`
+	IdRoot     int `json:"id_root"`
+	Code       int `json:"code"`
 }

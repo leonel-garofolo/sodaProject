@@ -22,6 +22,7 @@ func Router(context *enviroment.Context) {
 	app.Get("/delivery", deliveryService.GetDeliveries)
 	app.Get("/deliveriesToClient", deliveryService.GetClientForDelivery)
 	app.Post("/client", clientService.Save)
+	app.Delete("/client", clientService.Delete)
 	app.Get("/report", deliveryService.GetClientForDelivery)
 	app.Get("/", func(c *fiber.Ctx) error {
 		return c.JSON(context.App.Stack())

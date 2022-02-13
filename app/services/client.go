@@ -13,17 +13,10 @@ type ClientService struct {
 }
 
 func (s *ClientService) Save(c *fiber.Ctx) error {
-	log.Println("Save")
-	client := &model.Client{
-		Id:           1,
-		Address:      "",
-		NumAddress:   123,
-		Order:        1,
-		PricePerSoda: 1,
-		PricePerBox:  2,
-		IdDelivery:   1,
-		IdRoot:       1,
-		Due:          1,
+	log.Println("save proccesing")
+	client := &model.Client{}
+	if err := c.BodyParser(&client); err != nil {
+		log.Println(err)
 	}
 	if client.Id > 0 {
 		s.update(client)
@@ -33,21 +26,25 @@ func (s *ClientService) Save(c *fiber.Ctx) error {
 	return c.JSON(client)
 }
 
-func (s *ClientService) Delete(idClient int) {
-	log.Println("Delete")
+func (s *ClientService) Delete(c *fiber.Ctx) error {
+	idClient := c.Query("id", "-1")
+	log.Println("delete-> ", idClient)
 	sqlStatement := `
-	DELETE FROM client where id_client $1
+	DELETE FROM client where id_client =?
 	`
 	_, err := s.Context.Database.Connection.Exec(sqlStatement, idClient)
 	if err != nil {
 		panic(err)
 	}
+	return c.JSON(idClient)
 }
 
 func (s *ClientService) insert(client *model.Client) int {
+	log.Println("insert -> ", &client)
+
 	sqlStatement := `
-	INSERT INTO client(address, number, order, id_delivery, id_root, price_per_soda, price_per_box)
-	VALUE($1, $2, $3, $4, $5, $6, $7)
+	INSERT INTO client(address, number, num_order, id_delivery, id_root, price_per_soda, price_per_box)
+	VALUE(?, ?, ?, ?, ?, ?, ?)
 	`
 	_, err := s.Context.Database.Connection.Exec(sqlStatement,
 		client.Address,
@@ -66,13 +63,13 @@ func (s *ClientService) insert(client *model.Client) int {
 }
 
 func (s *ClientService) update(client *model.Client) {
+	log.Println("update -> ", &client)
 	sqlStatement := `
 	UPDATE client
-	SET address= $2, number= $3, order= $4, id_delivery= $5, id_root= $6, 
-		price_per_soda=$7, price_per_box= $8
-	WHERE id_client = $1`
+	SET address= ?, number= ?, num_order= ?, id_delivery= ?, id_root= ?, 
+		price_per_soda=?, price_per_box= ?
+	WHERE id_client = ?`
 	_, err := s.Context.Database.Connection.Exec(sqlStatement,
-		client.Id,
 		client.Address,
 		client.NumAddress,
 		client.Order,
@@ -80,6 +77,7 @@ func (s *ClientService) update(client *model.Client) {
 		client.IdRoot,
 		client.PricePerSoda,
 		client.PricePerBox,
+		client.Id,
 	)
 	if err != nil {
 		panic(err)
