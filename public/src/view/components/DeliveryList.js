@@ -26,7 +26,7 @@ export default class DeliveryList extends React.Component {
         return (
             <Container>
                 <Row>
-                    <Col sm={1} ><label>Repartos</label></Col>
+                    <Col sm={2} ><label>Seleccione el Reparto</label></Col>
                     <Col sm={2}>
                         <Form.Select>
                             {

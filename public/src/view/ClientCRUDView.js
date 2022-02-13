@@ -44,8 +44,8 @@ export default class ClientCRUDView extends React.Component {
     render() { 
         if(this.state.clients.length > 0) {
             return (
-                <Container className="p-3">    
-                    <Row>
+                <Container >    
+                    <Row className="bg-light" >
                         <DeliveryList />
                     </Row>  
                     <Row>

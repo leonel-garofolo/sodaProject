@@ -14,13 +14,13 @@ export default class Menu extends React.Component {
     }
     render() {
         return (                 
-            <Navbar bg="light"
+            <Navbar bg="dark"
                 onSelect={(selectedKey) => this.props.onClick(selectedKey)}
                 >
-                <Navbar.Collapse id="basic-navbar-nav">
-                    <Nav.Link eventKey="clients">Clientes</Nav.Link>
-                    <Nav.Link eventKey="list">Listados de Repartos</Nav.Link>
-                    <Nav.Link eventKey="delivery">Repartidores</Nav.Link>
+                <Navbar.Collapse >
+                    <Nav.Link className="text-light" eventKey="clients" >Clientes</Nav.Link>
+                    <Nav.Link className="text-light" eventKey="list">Listados de Repartos</Nav.Link>
+                    <Nav.Link className="text-light" eventKey="delivery">Repartidores</Nav.Link>
                 </Navbar.Collapse>
           </Navbar>
         );   
