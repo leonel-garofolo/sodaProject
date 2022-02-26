@@ -60,9 +60,6 @@ func (d *DeliveryService) GetDeliveries(c *fiber.Ctx) error {
 		}
 		deliveries = append(deliveries, delivery)
 	}
-	if err = rows.Err(); err != nil {
-		return c.JSON(nil)
-	}
 	return c.JSON(deliveries)
 }
 

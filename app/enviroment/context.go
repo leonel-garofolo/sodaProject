@@ -5,7 +5,6 @@ import (
 	"fmt"
 
 	_ "github.com/go-sql-driver/mysql"
-
 	"github.com/gofiber/fiber/v2"
 )
 

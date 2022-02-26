@@ -13,11 +13,18 @@ type ClientService struct {
 }
 
 func (s *ClientService) Save(c *fiber.Ctx) error {
-	log.Println("save proccesing")
-	client := &model.Client{}
-	if err := c.BodyParser(&client); err != nil {
-		log.Println(err)
+	client := new(model.Client)
+	if err := c.BodyParser(client); err != nil {
+		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
+			"message": err.Error(),
+		})
 	}
+
+	errors := model.ValidateStruct(*client)
+	if errors != nil {
+		return c.Status(fiber.StatusBadRequest).JSON(errors)
+	}
+
 	if client.Id > 0 {
 		s.update(client)
 	} else {
