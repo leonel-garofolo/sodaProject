@@ -31,9 +31,14 @@ func (c *Dao) createConnection() {
 	fmt.Printf("Stablishment connection Mysql [ip:%s|port:%d|schemaName:%s]\n", c.Database.Ip, c.Database.Port, c.Database.Schema)
 }
 
-func (d *Dao) GetClientForDelivery() []model.Client {
+func (d *Dao) GetClientForDelivery(codRoot int) []model.Client {
 	db := d.Database.Connection
-	rows, err := db.Query("select * from client")
+	sqlStatement := `
+		select c.*  
+		from client c 
+		inner join delivery_root dr on dr.id_delivery = c.id_delivery and dr.id_root = c.id_root 
+		where dr.code = ?`
+	rows, err := db.Query(sqlStatement, codRoot)
 	if err != nil {
 		panic(err.Error())
 	}

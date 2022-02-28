@@ -19,7 +19,7 @@ export default class ListClientView extends React.Component {
         }        
     }
 
-    async componentWillMount() {
+    async componentWillMount() {        
         await s.getDeliveryClient()        
         this.setState({                
             clients: s.getData()
@@ -39,6 +39,7 @@ export default class ListClientView extends React.Component {
     }
 
     render() {         
+        console.log("deliveries", this.state.deliveries)
         if(this.state.clients.length > 0) {
             return (
                 <Container>

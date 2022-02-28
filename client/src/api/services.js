@@ -13,13 +13,17 @@ export default class Services extends Commons{
     async getDeliveries() {
         responseData = []
         await super.get("delivery", null)            
-            .then(data => responseData = data)        
+            .then(data => this.reloadData(data)) 
     }
 
     async getDeliveryClient() {
         responseData = []
         await super.get("deliveriesToClient", null)
-            .then(data => responseData = data) 
+            .then(data => this.reloadData(data)) 
+    }
+
+    reloadData(data){
+        (data != null? responseData = data:responseData= [])
     }
 }
 
