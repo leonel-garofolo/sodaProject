@@ -4,31 +4,31 @@ import (
 	"log"
 
 	"github.com/gofiber/fiber/v2"
-	"github.com/leonel-garofolo/soda/app/enviroment"
 	"github.com/leonel-garofolo/soda/app/services"
 )
 
 const app_PATH = "/app"
 
-func Router(context *enviroment.Context) {
-	log.Println("setup -> Router config")
-	app := context.App.Group(app_PATH)
-	deliveryService := services.DeliveryService{
-		Context: context,
-	}
-	clientService := services.ClientService{
-		Context: context,
-	}
-	reportService := services.Report{
-		Context: context,
-	}
+type Router struct {
+	App             *fiber.App
+	DeliveryService services.DeliveryService
+	ClientService   services.ClientService
+	ReportService   services.ReportService
+}
 
-	app.Get("/delivery", deliveryService.GetDeliveries)
-	app.Get("/deliveriesToClient", deliveryService.GetClientForDelivery)
-	app.Post("/client", clientService.Save)
-	app.Delete("/client", clientService.Delete)
-	app.Get("/report", reportService.GenerateReport)
+func New(router Router) *Router {
+	return &router
+}
+
+func (r *Router) Setup() {
+	log.Println("setup -> Router config")
+	app := r.App.Group(app_PATH)
+	app.Get("/delivery", r.DeliveryService.GetDeliveries)
+	app.Get("/deliveriesToClient", r.DeliveryService.GetClientForDelivery)
+	app.Post("/client", r.ClientService.Save)
+	app.Delete("/client", r.ClientService.Delete)
+	app.Get("/report", r.ReportService.GenerateReport)
 	app.Get("/", func(c *fiber.Ctx) error {
-		return c.JSON(context.App.Stack())
+		return c.JSON(r.App.Stack())
 	})
 }

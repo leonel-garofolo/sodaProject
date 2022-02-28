@@ -9,7 +9,7 @@ import (
 )
 
 func TestAPIHttpRequest(t *testing.T) {
-	api := Server{}
+	api := App{}
 	context := api.Start()
 
 	testRequests := []struct {

@@ -1,33 +1,54 @@
 package app
 
 import (
-	"github.com/gofiber/fiber/v2"
 	"github.com/leonel-garofolo/soda/app/enviroment"
+	"github.com/leonel-garofolo/soda/app/reports"
+	"github.com/leonel-garofolo/soda/app/repositories"
+	"github.com/leonel-garofolo/soda/app/services"
 )
 
-type Server struct {
+type App struct {
 }
 
-func (a *Server) Start() *enviroment.Context {
-	database := enviroment.CreateConnection("localhost", 3060, "soda")
-	context := &enviroment.Context{
-		App:      a.setupFiber(),
-		Database: database,
-		Log:      enviroment.CreateLog(),
-	}
-	context.App.Static("/", "./public")
-	Router(context)
-	context.App.Listen(":3000")
-
-	return context
-}
-
-func (a *Server) setupFiber() *fiber.App {
-	return fiber.New(fiber.Config{
-		Prefork:       true,
-		CaseSensitive: true,
-		StrictRouting: true,
-		ServerHeader:  "Fiber",
-		AppName:       "Test App v1.0.1",
+func (a *App) Start() {
+	context := enviroment.New(enviroment.Config{
+		Database: enviroment.Database{
+			Ip:     "localhost",
+			Port:   3060,
+			Schema: "soda",
+		},
 	})
+	context.Setup()
+	daos := a.setupDao(context.Database)
+	reports := a.setupReports(daos)
+	a.setupService(context, daos, reports)
+	context.App.Listen(":3000")
+}
+
+func (a *App) setupDao(database enviroment.Database) *repositories.Dao {
+	return repositories.New(repositories.Dao{
+		Database: database,
+	})
+}
+
+func (a *App) setupReports(daos *repositories.Dao) *reports.Reports {
+	return reports.New(&reports.Reports{
+		Dao: daos,
+	})
+}
+
+func (a *App) setupService(context *enviroment.Context, daos *repositories.Dao, report *reports.Reports) {
+	router := New(Router{
+		App: context.App,
+		DeliveryService: services.DeliveryService{
+			Dao: daos,
+		},
+		ClientService: services.ClientService{
+			Dao: daos,
+		},
+		ReportService: services.ReportService{
+			Reports: report,
+		},
+	})
+	router.Setup()
 }

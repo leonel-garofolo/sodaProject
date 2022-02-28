@@ -17,9 +17,14 @@ package cmd
 
 import (
 	// with go modules enabled (GO111MODULE=on or outside GOPATH)
+	"fmt"
 	"log"
 
 	"github.com/Kirides/go-dbf"
+	"github.com/leonel-garofolo/soda/app/enviroment"
+	"github.com/leonel-garofolo/soda/app/model"
+	"github.com/leonel-garofolo/soda/app/repositories"
+	"github.com/leonel-garofolo/soda/app/utilities"
 	"github.com/spf13/cobra"
 	"golang.org/x/text/encoding/charmap"
 )
@@ -54,13 +59,25 @@ type ClientDBF struct {
 	Reparto   string
 }
 
-func ProcessMigrateClientData(filePath string, codDelivery int) {
+func ProcessMigrateClientData(filePath string, codRoot int) {
 	dbfDB, err := dbf.Open(filePath, charmap.Windows1252.NewDecoder())
 	if err != nil {
 		panic(err)
 	}
 	defer dbfDB.Close()
 
+	daos := repositories.New(repositories.Dao{
+		Database: enviroment.Database{
+			Ip:     "localhost",
+			Port:   3060,
+			Schema: "soda",
+		},
+	})
+	idDelivery, idRoot, errRoot := daos.GetIdRoot(codRoot)
+	if errRoot != nil {
+		log.Println("CodRoot not found")
+		return
+	}
 	log.Println("count rows: ", dbfDB.CalculatedRecordCount())
 	var parseOption dbf.ParseOption
 	proccess := func(r *dbf.Record) error {
@@ -71,8 +88,16 @@ func ProcessMigrateClientData(filePath string, codDelivery int) {
 			}
 			//Example: map[CALLE:Liniers         CODIGO:1 DEUDA:280 NUMERO:1463 NUMEROREPA:0 PRECIO:4 PRECIO2:0]
 			log.Println(data)
-
-			//TODO insert to clients
+			daos.SaveClient(&model.Client{
+				Order:        utilities.ParseIntNoError(fmt.Sprintf("%d", data["CODIGO"])),
+				Address:      fmt.Sprintf("%s", data["CALLE"]),
+				NumAddress:   utilities.ParseIntNoError(fmt.Sprintf("%d", data["NUMERO"])),
+				Debt:         utilities.ParseFloatNoError(fmt.Sprintf("%.2f", data["DEUDA"])),
+				PricePerSoda: utilities.ParseFloatNoError(fmt.Sprintf("%.2f", data["PRECIO"])),
+				PricePerBox:  utilities.ParseFloatNoError(fmt.Sprintf("%.2f", data["PRECIO2"])),
+				IdDelivery:   idDelivery,
+				IdRoot:       idRoot,
+			})
 		}
 		return nil
 	}
