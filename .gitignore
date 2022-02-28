@@ -1,4 +1,7 @@
-public/package-lock.json
-public/node_modules/*
-.vscode/*
-go.sum
+# api ignore
+api/.vscode/*
+api/go.sum
+
+# cli ignore
+client/node_modules/*
+client/package-lock.json

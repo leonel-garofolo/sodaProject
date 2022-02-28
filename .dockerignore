@@ -1,2 +1,2 @@
-/public/node_modules/*
-/.vscode/*
+/client/public/node_modules/*
+/api/.vscode/*
