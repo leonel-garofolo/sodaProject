@@ -59,9 +59,36 @@ func (d *Dao) GetClientForDelivery(codRoot int) []model.Client {
 	return clients
 }
 
+func (d *Dao) GetDeliveriesCode() []model.Delivery {
+	db := d.Database.Connection
+	sqlStatement :=
+		`select d.id_delivery, d.name, dr.code 
+		from delivery_root dr 
+		inner join delivery d on d.id_delivery = dr.id_delivery
+		order by dr.code asc`
+	rows, err := db.Query(sqlStatement)
+	if err != nil {
+		panic(err.Error())
+	}
+	defer rows.Close()
+
+	var deliveries []model.Delivery
+	for rows.Next() {
+		var delivery model.Delivery
+		if err := rows.Scan(&delivery.Id, &delivery.Name, &delivery.Code); err != nil {
+			break
+		}
+		deliveries = append(deliveries, delivery)
+	}
+
+	return deliveries
+}
+
 func (d *Dao) GetDeliveries() []model.Delivery {
 	db := d.Database.Connection
-	rows, err := db.Query("select * from delivery")
+	sqlStatement :=
+		`select * from delivery`
+	rows, err := db.Query(sqlStatement)
 	if err != nil {
 		panic(err.Error())
 	}
@@ -73,36 +100,10 @@ func (d *Dao) GetDeliveries() []model.Delivery {
 		if err := rows.Scan(&delivery.Id, &delivery.Name); err != nil {
 			break
 		}
-
-		deliveryRoot := d.getDeliveryRoot(delivery.Id)
-		for i := 0; i < len(deliveryRoot); i++ {
-			delivery.Code = append(delivery.Code, deliveryRoot[i].Code)
-		}
 		deliveries = append(deliveries, delivery)
 	}
 
 	return deliveries
-}
-
-func (d *Dao) getDeliveryRoot(idDelivery int) []model.DeliveryRoot {
-	log.Println("entry-> getDeliveryRoot")
-	rows, err := d.Database.Connection.Query("select * from delivery_root dr where dr.id_delivery= ?", idDelivery)
-	if err != nil {
-		panic(err.Error())
-	}
-	defer rows.Close()
-
-	var deliveriesRoot []model.DeliveryRoot
-	for rows.Next() {
-		var deliveryRoot model.DeliveryRoot
-		if err := rows.Scan(&deliveryRoot.IdDelivery, &deliveryRoot.IdRoot, &deliveryRoot.Code); err != nil {
-			return deliveriesRoot
-		}
-		deliveriesRoot = append(deliveriesRoot, deliveryRoot)
-	}
-	fmt.Printf("number of Root finded to delivery: %d", len(deliveriesRoot))
-	fmt.Println()
-	return deliveriesRoot
 }
 
 func (d *Dao) SaveClient(client *model.Client) *model.Client {

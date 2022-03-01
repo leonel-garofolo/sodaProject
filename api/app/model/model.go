@@ -19,7 +19,7 @@ type Client struct {
 type Delivery struct {
 	Id   int    `json:"id"`
 	Name string `json:"name"`
-	Code []int
+	Code int    `json:"code"`
 }
 
 type DeliveryRoot struct {

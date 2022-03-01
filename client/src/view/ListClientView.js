@@ -16,14 +16,8 @@ export default class ListClientView extends React.Component {
         super(props);   
         this.state = {
             clients: [],
-        }        
-    }
-
-    async componentWillMount() {        
-        await s.getDeliveryClient()        
-        this.setState({                
-            clients: s.getData()
-        })
+        }
+        this.onDeliverySelected = this.onDeliverySelected.bind(this)
     }
 
     save(){
@@ -38,30 +32,29 @@ export default class ListClientView extends React.Component {
 
     }
 
-    render() {         
-        console.log("deliveries", this.state.deliveries)
-        if(this.state.clients.length > 0) {
-            return (
-                <Container>
-                        <Row>
-                            <Col >
-                                <DeliveryList />
-                            </Col>                            
-                            <Col xs lg="2">
-                                <Button onClick={this.goBefore}>Imprimir</Button>
-                            </Col>
-                        </Row>
-                        <Row>
-                            <Col><DataTable data={this.state.clients}/></Col>                            
-                        </Row>                        
-                </Container>   
-            );        
-        } else {
-            return (
-                <div>
-                    <h3>Listado de Clientes</h3>                        
-                </div>
-            );        
-        }
+    async onDeliverySelected(code){
+        console.log("onDeliverySelected", code)        
+        await s.getDeliveryClient(code)
+        this.setState({
+            clients: s.getData()
+        })
+    }
+
+    render() {                 
+        return (
+            <Container>
+                    <Row>
+                        <Col >
+                            <DeliveryList onDeliverySelected={this.onDeliverySelected}/>
+                        </Col>                            
+                        <Col xs lg="2">
+                            <Button onClick={this.goBefore}>Imprimir</Button>
+                        </Col>
+                    </Row>
+                    <Row>
+                        <Col><DataTable data={this.state.clients}/></Col>                            
+                    </Row>                        
+            </Container> 
+        )
     }
 }

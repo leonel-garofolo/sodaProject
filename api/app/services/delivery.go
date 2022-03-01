@@ -22,3 +22,8 @@ func (d *DeliveryService) GetDeliveries(c *fiber.Ctx) error {
 	log.Println("entry-> GetDeliveries")
 	return c.JSON(d.Dao.GetDeliveries())
 }
+
+func (d *DeliveryService) GetDeliveriesCode(c *fiber.Ctx) error {
+	log.Println("entry-> GetDeliveriesCode")
+	return c.JSON(d.Dao.GetDeliveriesCode())
+}

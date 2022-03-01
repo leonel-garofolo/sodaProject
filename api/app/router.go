@@ -24,6 +24,7 @@ func (r *Router) Setup() {
 	log.Println("setup -> Router config")
 	app := r.App.Group(app_PATH)
 	app.Get("/delivery", r.DeliveryService.GetDeliveries)
+	app.Get("/deliveryCode", r.DeliveryService.GetDeliveriesCode)
 	app.Get("/deliveriesToClient", r.DeliveryService.GetClientForDelivery)
 	app.Post("/client", r.ClientService.Save)
 	app.Delete("/client", r.ClientService.Delete)
