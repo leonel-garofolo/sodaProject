@@ -1,8 +1,11 @@
 import React from 'react';
 import './App.css';
 import Main from './layout/Main';
-import Menu from './layout/Menu';
 import Services from './api/services';
+import MenuDashboard from './layout/MenuDashboard';
+import { Layout } from 'antd';
+
+const { Content } = Layout;
 
 class App extends React.Component {
   constructor(props) {
@@ -22,12 +25,12 @@ class App extends React.Component {
   render() {
     return (
       <div className="App">
-        <header className="App-header">
-          <Menu onClick={this.onMenuSelected} />
-          <div className="App-content">
-            <Main content={this.state.content}/>
-          </div>
-        </header>
+        <Layout className="layout">
+          <MenuDashboard onClick={this.onMenuSelected} />
+          <Content>
+              <Main content={this.state.content}/>
+          </Content>
+        </Layout>        
       </div>
     );
   }

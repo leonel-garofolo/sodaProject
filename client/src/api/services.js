@@ -1,36 +1,82 @@
 import Commons from './commons';
 
-var responseData = []
-export default class Services extends Commons{
+var responseData= []
+export default class Services extends Commons{    
     constructor() {  
         super()              
     }
 
-    getData(){
+    resetResponse(){
+        responseData= {
+            errors: [],
+            data: []
+        }
+    }
+
+    getResponse(){
         return responseData
     }
 
     async getDeliveries() {
-        responseData = []
-        await super.get("delivery", null)            
-            .then(data => this.reloadData(data)) 
+        this.resetResponse()
+        await super.get("delivery", null)  
+            .then(function(response){
+                return response.json()
+            })          
+            .then(data => this.reloadResponse(data, null)) 
+            
     }
 
     async getDeliveriesCode() {
-        responseData = []
+        this.resetResponse()
         await super.get("deliveryCode", null)            
-            .then(data => this.reloadData(data)) 
+            .then((response)=>{
+                if(response.ok){
+                    return response.json()    
+                }
+                return response.text().then(text => { throw new Error(text) })
+            })          
+            .then(data => this.reloadResponse(data, null)) 
+            .catch(error => {
+                console.log(error)
+            })
     }
 
     async getDeliveryClient(code) {
-        responseData = []
-        await super.get("deliveriesToClient?cod="+code, null)            
-            .then(data => this.reloadData(data)) 
+        this.resetResponse()
+        await super.get("deliveriesToClient?cod="+code, null)  
+            .then((response)=>{
+                return response.json()
+            })                    
+            .then(data => this.reloadResponse(data, null)) 
     }
 
-    reloadData(data){
-        (data != null? responseData = data:responseData= [])
+    async getReport(code) {
+        this.resetResponse()
+        window.open().location.href = this.getENDPOINT() + "report?id="+code;
     }
+
+    async saveClient(client){
+        this.resetResponse()
+        await super.post("client", client)
+            .then(function(response) {                
+                if(response.ok){
+                    return response.json()
+                }                
+                return response.text().then(text => { throw new Error(text) })
+            })
+            .then(data => this.reloadResponse(data, null))
+            .catch(error => {                
+                this.reloadResponse(null, JSON.parse(error.message))
+            });                    
+    }
+
+    reloadResponse(data, errors){
+        responseData = {
+            data: data != null? data: [],
+            errors: errors != null? errors: []
+        }        
+    }    
 }
 
 

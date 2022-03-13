@@ -1,9 +1,21 @@
 import React from "react";
 import Services from '../api/services';
-import Table from 'react-bootstrap/Table'
+import { Layout, Table } from 'antd';
+const { Content } = Layout;
 
 const s = new Services()
-
+const columns = [
+    {
+      title: 'Id',
+      dataIndex: 'id',
+      key: 'id',      
+    },
+    {
+      title: 'Nombre',
+      dataIndex: 'name',
+      key: 'name',      
+    }
+  ];
 export default class DeliveryView extends React.Component {
 
     constructor(props) {
@@ -15,28 +27,18 @@ export default class DeliveryView extends React.Component {
     async componentWillMount() {
         await s.getDeliveries()   
         this.setState({                
-            deliveries: s.getData()
+            deliveries: s.getResponse().data
         })
     }
 
     render() {    
         if(this.state.deliveries.length > 0) {
             return (
-                <Table striped bordered hover responsive="sm" size="sm">
-                    <thead>
-                        <tr>
-                        <th>#</th>
-                        <th>Repartidor</th>                        
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {
-                            this.state.deliveries.map((delivery, i) => {     
-                                return (<tr><td>{delivery.id}</td><td>{delivery.name}</td></tr>) 
-                            })
-                        } 
-                    </tbody>
-                </Table>
+                <Layout>
+                    <Content>
+                        <Table pagination={{position:['none']}} dataSource={this.state.deliveries} columns={columns} />
+                    </Content>                    
+                </Layout>                
             );        
         } else {
             return (

@@ -15,5 +15,5 @@ func (r *ReportService) GenerateReport(c *fiber.Ctx) error {
 	idRoot := c.Query("id", "-1")
 	log.Println("generateReport root-> ", idRoot)
 	r.Reports.BuildSheetRoot(idRoot)
-	return c.JSON(idRoot)
+	return c.Download("simple1.pdf", "simple1.pdf")
 }
