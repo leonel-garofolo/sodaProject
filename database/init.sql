@@ -9,7 +9,7 @@ CREATE TABLE IF NOT EXISTS `client` (
   `id_root` int(11) NOT NULL,
   `price_per_soda` decimal(10,0) NOT NULL,
   `price_per_box` decimal(10,0) NOT NULL,
-  `debt` decimal(10,0) NOT NULL,
+  `debt` decimal(10,0) NOT NULL DEFAULT 0,
   PRIMARY KEY (`id_client`)
 ) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=latin1;
 

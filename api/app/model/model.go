@@ -6,14 +6,14 @@ import (
 
 type Client struct {
 	Id           int     `json:"id"`
-	Order        int     `json:"order" validate:"required,min=1,max=4"`
+	Order        int     `json:"order" validate:"required,min=1,max=999"`
 	Address      string  `json:"address" validate:"required,min=3,max=100"`
-	NumAddress   int     `json:"num_address"  validate:"required,min=1,max=6"`
-	PricePerSoda float64 `json:"price_per_soda"  validate:"required,min=1,max=10"`
-	PricePerBox  float64 `json:"price_per_box" validate:"required,min=1,max=10"`
-	Debt         float64 `json:"debt" validate:"required,min=1,max=10"`
-	IdDelivery   int     `json:"id_delivery"`
-	IdRoot       int     `json:"id_root" validate:"required,min=1,max=2"`
+	NumAddress   int     `json:"num_address"  validate:"required,min=1,max=99999"`
+	PricePerSoda float64 `json:"price_per_soda"  validate:"required,min=0.1,max=99999.99"`
+	PricePerBox  float64 `json:"price_per_box" validate:"min=0.1,max=99999.99"`
+	Debt         float64 `json:"debt" validate:"min=0.1,max=99999999.99"`
+	IdDelivery   int     `json:"id_delivery" validate:"required"`
+	IdRoot       int     `json:"id_root" validate:"required"`
 }
 
 type Delivery struct {

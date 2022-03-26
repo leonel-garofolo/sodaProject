@@ -25,7 +25,7 @@ export default class DeliveryList extends React.Component {
             deliveryNameSelected: (response.data.length > 0 ? response.data[0].name : "")
         })
         if (this.state.deliveries.length > 0) {
-            this.props.onDeliverySelected(this.state.deliveries[0].code)
+            this.props.onDeliverySelected(this.state.deliveries[0])
         }
     }
 
@@ -34,7 +34,7 @@ export default class DeliveryList extends React.Component {
             deliveries: this.state.deliveries,
             deliveryNameSelected: this.state.deliveries[value].name
         })
-        this.props.onDeliverySelected(this.state.deliveries[value].code)        
+        this.props.onDeliverySelected(this.state.deliveries[value])        
     }
 
     render() {

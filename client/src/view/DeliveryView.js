@@ -6,16 +6,17 @@ const { Content } = Layout;
 const s = new Services()
 const columns = [
     {
-      title: 'Id',
-      dataIndex: 'id',
-      key: 'id',      
+        title: 'Id',
+        dataIndex: 'id',
+        key: 'id',
+        width: '5%',
     },
     {
-      title: 'Nombre',
-      dataIndex: 'name',
-      key: 'name',      
+        title: 'Nombre',
+        dataIndex: 'name',
+        key: 'name',
     }
-  ];
+];
 export default class DeliveryView extends React.Component {
 
     constructor(props) {
@@ -25,27 +26,27 @@ export default class DeliveryView extends React.Component {
         }
     }
     async componentWillMount() {
-        await s.getDeliveries()   
-        this.setState({                
+        await s.getDeliveries()
+        this.setState({
             deliveries: s.getResponse().data
         })
     }
 
-    render() {    
-        if(this.state.deliveries.length > 0) {
+    render() {
+        if (this.state.deliveries.length > 0) {
             return (
                 <Layout>
                     <Content>
-                        <Table pagination={{position:['none']}} dataSource={this.state.deliveries} columns={columns} />
-                    </Content>                    
-                </Layout>                
-            );        
+                        <Table pagination={{ position: ['none'] }} dataSource={this.state.deliveries} columns={columns} />
+                    </Content>
+                </Layout>
+            );
         } else {
             return (
                 <div>
                     <h3>Cargando...</h3>
                 </div>
-            );        
-        }       
+            );
+        }
     }
 }

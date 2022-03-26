@@ -37,7 +37,8 @@ func (d *Dao) GetClientForDelivery(codRoot int) []model.Client {
 		select c.*  
 		from client c 
 		inner join delivery_root dr on dr.id_delivery = c.id_delivery and dr.id_root = c.id_root 
-		where dr.code = ?`
+		where dr.code = ?
+		order by c.num_order asc`
 	rows, err := db.Query(sqlStatement, codRoot)
 	if err != nil {
 		panic(err.Error())
@@ -108,9 +109,14 @@ func (d *Dao) GetDeliveries() []model.Delivery {
 
 func (d *Dao) SaveClient(client *model.Client) *model.Client {
 	if client.Id > 0 {
+		orderChange := d.verifyClientOrderWasChanged(client.Id, client.Order)
 		d.update(client)
+		if orderChange {
+			d.updateOrder(client.Id, client.Order)
+		}
 	} else {
 		client.Id = d.insert(client)
+		d.updateOrder(client.Id, client.Order)
 	}
 	return client
 }
@@ -259,4 +265,23 @@ func (d *Dao) GetIdRoot(codeRoot int) (int, int, error) {
 		}
 	}
 	return idDelivery, idRoot, nil
+}
+
+func (d *Dao) updateOrder(clientId int, order int) {
+	log.Println("update order -> ", &clientId, &order)
+	sqlStatement := `update client set num_order= num_order +1 where num_order >= ? and id_client != ?`
+	_, err := d.Database.Connection.Exec(sqlStatement, order, clientId)
+	if err != nil {
+		panic(err)
+	}
+}
+
+func (d *Dao) verifyClientOrderWasChanged(clientId int, order int) bool {
+	db := d.Database.Connection
+	rows, err := db.Query("select id_client from client where id_client = ? and num_order = ?", clientId, order)
+	if err != nil {
+		panic(err.Error())
+	}
+	defer rows.Close()
+	return !rows.Next()
 }
