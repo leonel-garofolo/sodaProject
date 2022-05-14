@@ -20,7 +20,8 @@ func New(dao Dao) *Dao {
 }
 
 func (c *Dao) createConnection() {
-	db, err := sql.Open("mysql", "root:1234@tcp(localhost:3306)/soda")
+	sConnection := fmt.Sprintf("root:1234@tcp(%s:%d)/%s", c.Database.Ip, c.Database.Port, c.Database.Schema)
+	db, err := sql.Open("mysql", sConnection)
 
 	// if there is an error opening the connection, handle it
 	if err != nil {
@@ -28,7 +29,7 @@ func (c *Dao) createConnection() {
 	}
 
 	c.Database.Connection = db
-	fmt.Printf("Stablishment connection Mysql [ip:%s|port:%d|schemaName:%s]\n", c.Database.Ip, c.Database.Port, c.Database.Schema)
+	fmt.Printf("Stablishment connection Mysql -> %s\n", sConnection)
 }
 
 func (d *Dao) GetClientForDelivery(codRoot int) []model.Client {
@@ -138,10 +139,10 @@ func (d *Dao) insert(client *model.Client) int {
 	log.Println("insert -> ", &client)
 
 	sqlStatement := `
-	INSERT INTO client(address, number, num_order, id_delivery, id_root, price_per_soda, price_per_box, debt)
+	INSERT INTO client(address, address_number, num_order, id_delivery, id_root, price_per_soda, price_per_box, debt)
 	VALUE(?, ?, ?, ?, ?, ?, ?, ?)
 	`
-	_, err := d.Database.Connection.Exec(sqlStatement,
+	result, err := d.Database.Connection.Exec(sqlStatement,
 		client.Address,
 		client.NumAddress,
 		client.Order,
@@ -154,8 +155,12 @@ func (d *Dao) insert(client *model.Client) int {
 	if err != nil {
 		panic(err)
 	}
-	// TODO devolver ID
-	return 1
+
+	lastId, errLastID := result.LastInsertId()
+	if errLastID != nil {
+		panic(errLastID)
+	}
+	return lastId
 }
 
 func (d *Dao) update(client *model.Client) {
@@ -187,7 +192,7 @@ func (d *Dao) GetClientsRoot(idRoot string) ([]interface{}, error) {
 	}
 
 	db := d.Database.Connection
-	rows, err := db.Query("select c.num_order, c.address, c.`number`, c.price_per_soda, c.price_per_box, debt from client c where c.id_root= ? order by c.num_order asc", idRootInt)
+	rows, err := db.Query("select c.num_order, c.address, c.`address_number`, c.price_per_soda, c.price_per_box, debt from client c where c.id_root= ? order by c.num_order asc", idRootInt)
 	if err != nil {
 		panic(err.Error())
 	}

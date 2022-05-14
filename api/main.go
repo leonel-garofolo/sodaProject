@@ -7,6 +7,4 @@ import (
 func main() {
 	api := app.App{}
 	api.Start()
-	//TODO when I have to execution?
-	//cmd.Execute()
 }

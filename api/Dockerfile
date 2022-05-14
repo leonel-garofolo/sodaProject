@@ -3,11 +3,6 @@
 # Start from golang:1.12-alpine base image
 FROM golang:1.16-alpine
 
-# The latest alpine images don't have some tools like (`git` and `bash`).
-# Adding git, bash and openssh to the image
-RUN apk update && apk upgrade && \
-    apk add --no-cache bash git openssh
-
 # Add Maintainer Info
 LABEL maintainer="Leonel Garofolo <garofolo.leonel@gmail.com>"
 
@@ -26,8 +21,11 @@ COPY . .
 # Build the Go app
 RUN go build -o main .
 
-# Expose port 8080 to the outside world
-EXPOSE 8080
+ARG COMMIT
+ENV COMMIT ${COMMIT}
+
+# Expose port 3000   to the outside world
+EXPOSE 3000
 
 # Run the executable
-CMD ["./main"]
+CMD ["/app/main"]

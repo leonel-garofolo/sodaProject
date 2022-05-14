@@ -1,0 +1,19 @@
+services:
+  api-go:
+    container_name: api_services
+    image: golang:1.16.1-alpine
+    working_dir: /home/app/api
+    command: go run main.go
+    # Configuration for building the docker image for the service
+    #build:
+    #  dockerfile: Dockerfile
+    #  context: .
+    volumes:
+      - .:/home/app/api  
+    environment:
+      API_SERVER_ADDR: ":3000"           
+    ports:
+      - "3000:3000" # Forward the exposed port 3000 on the container to port 3000 on the host machine
+    expose:
+      - "3000"
+    #restart: unless-stopped

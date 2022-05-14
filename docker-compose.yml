@@ -1,7 +1,10 @@
 # Docker Compose file Reference (https://docs.docker.com/compose/compose-file/)
 version: '3.9'
 
+
 volumes:
+  db:
+  api:
   data-volume: {}
 
 # Define services
@@ -9,13 +12,28 @@ services:
   db:
     extends:
       file: database/db-service.yml
-      service: mysql    
+      service: mysql
+    networks:
+      - backend    
   api:
     extends:
       file: api/api-service.yml
-      service: api-go    
+      service: api-go
+    depends_on:
+      - db
+    links:
+      - db
     networks:
-      - backend  
+      - backend
+  client:
+    extends:
+      file: client/client-service.yml
+      service: node
+    depends_on:
+      - api
+    networks:
+      - backend
 
 networks:
-  backend:    
+  backend:
+    driver: bridge

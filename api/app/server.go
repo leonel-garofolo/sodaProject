@@ -13,8 +13,8 @@ type App struct {
 func (a *App) Start() {
 	context := enviroment.New(enviroment.Config{
 		Database: enviroment.Database{
-			Ip:     "localhost",
-			Port:   3060,
+			Ip:     "db",
+			Port:   3306,
 			Schema: "soda",
 		},
 	})

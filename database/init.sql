@@ -3,7 +3,7 @@ use soda;
 CREATE TABLE IF NOT EXISTS `client` (
   `id_client` int(11) NOT NULL AUTO_INCREMENT,
   `address` varchar(256) NOT NULL,
-  `number` int(11) NOT NULL,
+  `address_number` int(11) NOT NULL,
   `num_order` int(11) NOT NULL,
   `id_delivery` int(11) NOT NULL,
   `id_root` int(11) NOT NULL,
