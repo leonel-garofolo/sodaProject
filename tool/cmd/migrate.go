@@ -20,9 +20,11 @@ import (
 	"database/sql"
 	"fmt"
 	"log"
+	"os"
 	"strconv"
 
 	"github.com/Kirides/go-dbf"
+	_ "github.com/go-sql-driver/mysql"
 	"github.com/spf13/cobra"
 	"golang.org/x/text/encoding/charmap"
 )
@@ -37,14 +39,29 @@ var migrate = &cobra.Command{
 	Short: "Migrate data of xBase to Mysql database",
 	Long:  "",
 	Run: func(cmd *cobra.Command, args []string) {
-		cmd.Printf("%s %s %s %s", Prefix, Root, Migrate, "<PATH>/<file_name>.DBF")
-		cmd.Println("")
-
-		//TODO validation file path
-
-		//TODO call method
-
+		if len(args) < 2 {
+			cmd.Printf("Error in commmand execution, please use the follow formatter /n %s %s %s %s", Prefix, Root, Migrate, "<PATH>/<file_name>.DBF")
+			cmd.Println("")
+		} else {
+			path := args[0]
+			code := args[1]
+			codeNum, err := strconv.Atoi(code)
+			if err == nil {
+				if isFilePathValid(path) {
+					ProcessMigrateClientData(path, codeNum)
+				}
+			} else {
+				cmd.Println("Oops! Error parser code root")
+			}
+		}
 	},
+}
+
+func isFilePathValid(path string) bool {
+	if _, err := os.Stat(path); err == nil {
+		return true
+	}
+	return false
 }
 
 type ClientDBF struct {

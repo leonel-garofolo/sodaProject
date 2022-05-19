@@ -135,7 +135,7 @@ func (d *Dao) DeleteClient(idClient int) bool {
 	return true
 }
 
-func (d *Dao) insert(client *model.Client) int {
+func (d *Dao) insert(client *model.Client) int64 {
 	log.Println("insert -> ", &client)
 
 	sqlStatement := `
@@ -272,7 +272,7 @@ func (d *Dao) GetIdRoot(codeRoot int) (int, int, error) {
 	return idDelivery, idRoot, nil
 }
 
-func (d *Dao) updateOrder(clientId int, order int) {
+func (d *Dao) updateOrder(clientId int64, order int) {
 	log.Println("update order -> ", &clientId, &order)
 	sqlStatement := `update client set num_order= num_order +1 where num_order >= ? and id_client != ?`
 	_, err := d.Database.Connection.Exec(sqlStatement, order, clientId)
@@ -281,7 +281,7 @@ func (d *Dao) updateOrder(clientId int, order int) {
 	}
 }
 
-func (d *Dao) verifyClientOrderWasChanged(clientId int, order int) bool {
+func (d *Dao) verifyClientOrderWasChanged(clientId int64, order int) bool {
 	db := d.Database.Connection
 	rows, err := db.Query("select id_client from client where id_client = ? and num_order = ?", clientId, order)
 	if err != nil {

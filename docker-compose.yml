@@ -14,7 +14,9 @@ services:
       file: database/db-service.yml
       service: mysql
     networks:
-      - backend    
+      - backend
+    profiles: ["database", "dev", "prd"]    
+
   api:
     extends:
       file: api/api-service.yml
@@ -25,6 +27,8 @@ services:
       - db
     networks:
       - backend
+    profiles: ["dev", "prd"]    
+     
   client:
     extends:
       file: client/client-service.yml
@@ -33,6 +37,7 @@ services:
       - api
     networks:
       - backend
+    profiles: ["dev", "prd"]    
 
 networks:
   backend:

@@ -5,7 +5,7 @@ import (
 )
 
 type Client struct {
-	Id           int     `json:"id"`
+	Id           int64   `json:"id"`
 	Order        int     `json:"order" validate:"required,min=1,max=999"`
 	Address      string  `json:"address" validate:"required,min=3,max=100"`
 	NumAddress   int     `json:"num_address"  validate:"required,min=1,max=99999"`

@@ -2,6 +2,7 @@ services:
   api-go:
     container_name: api_services
     image: golang:1.16.1-alpine
+    restart: always
     working_dir: /home/app/api
     command: go run main.go
     # Configuration for building the docker image for the service

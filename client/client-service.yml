@@ -2,6 +2,7 @@ services:
   node:
     container_name: client_react
     image: "node:latest"
+    restart: always
     user: "node"
     working_dir: /home/node/app
     environment:
