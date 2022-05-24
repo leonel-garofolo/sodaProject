@@ -47,5 +47,9 @@ soda migrate <name_file>.dbx
 
 
 **Production**
+Execute docker commands to up three containers.
 
-(Building)
+```
+docker compose --profile prd up
+```
+

@@ -1,6 +1,5 @@
 # api ignore
 api/.vscode/*
-api/go.sum
 api/main.exe
 api/*.pdf
 api/tmp/*
