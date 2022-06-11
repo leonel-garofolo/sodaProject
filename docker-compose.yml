@@ -39,6 +39,7 @@ services:
       - backend
     profiles: ["dev", "prd"]    
 
+
 networks:
   backend:
     driver: bridge

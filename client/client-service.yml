@@ -1,16 +1,11 @@
 services:
   node:
     container_name: client_react
-    image: "node:latest"
-    restart: always
-    user: "node"
-    working_dir: /home/node/app
-    environment:
-      - NODE_ENV=production
-    volumes:
-      - ./:/home/node/app
+    build:
+      context: ./
+      dockerfile: Dockerfile
+      args:
+        - REACT_APP_SERVICES_HOST=/services/m
     ports:
-      - 8080:3000    
-    expose:
-      - "8080"
-    command: "npm start"
+      - "80:80"
+            

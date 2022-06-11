@@ -8,6 +8,5 @@ api/tmp/*
 client/node_modules/*
 client/package-lock.json
 
-tools/go.sum
 tools/main
 

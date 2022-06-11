@@ -1,0 +1,20 @@
+services:
+  node:
+    container_name: client_react
+    image: "node:latest"
+    # restart: always
+    user: "node"
+    working_dir: /home/node/app
+    environment:
+      - NODE_ENV=production
+    volumes:
+      - ./:/home/node/app
+    ports:
+      - 8080:3000    
+    expose:
+      - "8080"
+
+    command: >
+      sh -c "npm install react-scripts@3.4.1 -g --silent &&
+             npm install --production &&
+             npm start"
