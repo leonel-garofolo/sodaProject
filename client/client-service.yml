@@ -1,6 +1,7 @@
 services:
   node:
     container_name: client_react
+    restart: always
     build:
       context: ./
       dockerfile: Dockerfile
