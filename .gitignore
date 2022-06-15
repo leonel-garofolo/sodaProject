@@ -6,7 +6,6 @@ api/tmp/*
 
 # cli ignore
 client/node_modules/*
-client/package-lock.json
 
 tools/main
 
